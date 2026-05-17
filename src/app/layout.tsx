@@ -19,7 +19,9 @@ export default function RootLayout({
           <div className="shell topbar-inner">
             <Link className="brand" href="/">
               <span className="brand-mark">V</span>
-              <span>Vulpine Bids</span>
+              <span>
+                Vulpine <em>Bid Engine</em>
+              </span>
             </Link>
             <nav className="nav" aria-label="Main navigation">
               <Link href="/price-sheets">Price Sheets</Link>

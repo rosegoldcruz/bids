@@ -29,7 +29,7 @@ export function PriceSheets() {
     <>
       <div className="loud-strip">
         <div>
-          <strong>Use this page for product sheets and cabinet price lookup.</strong>
+          <strong>EMPLOYEES: CLICK HERE FOR CABINET PRODUCT PRICES.</strong>
           <p className="source-note">
             This is the master-derived HTML catalog. Do not treat the brochure PDF as the full pricing guide.
           </p>

@@ -10,17 +10,17 @@ export default function Home() {
       <div className="shell hero">
         <section className="hero-main">
           <div>
-            <h1>Cabinet bids without the spreadsheet maze.</h1>
+            <h1>Vulpine cabinet command center.</h1>
             <p className="hero-copy">
-              The team gets two giant doors: open the master-derived product price sheets, or build a bid in the
-              dashboard with margin, install, shipping, handles, and unit quantities all exposed.
+              Two giant buttons. One opens the master-derived HTML price sheets. One opens the actual bid dashboard.
+              No PDF guessing, no hidden Excel hunt, no wandering around.
             </p>
           </div>
 
           <div className="hero-actions">
             <Link className="big-cta" href="/price-sheets">
               <span>
-                <strong>OPEN PRICE SHEETS</strong>
+                <strong>OPEN PRODUCT SHEETS</strong>
                 <span>Search framed and frameless cabinet catalog pricing pulled from the Multi-Family Master Sheet.</span>
               </span>
               <span className="arrow-box">›</span>
@@ -28,7 +28,7 @@ export default function Home() {
 
             <Link className="big-cta secondary" href="/dashboard">
               <span>
-                <strong>OPEN BID DASHBOARD</strong>
+                <strong>OPEN BID CALCULATOR</strong>
                 <span>Paste SKUs, choose finish, tweak margin and operational costs, then quote from master logic.</span>
               </span>
               <span className="arrow-box">›</span>

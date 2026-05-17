@@ -131,6 +131,21 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
   );
 }
 
+function VulpineLogo() {
+  return (
+    <div className="vulpine-logo" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none">
+        <path d="M40 4L70 18V42C70 58 56 70 40 76C24 70 10 58 10 42V18L40 4Z" fill="#1C2333" stroke="#C9992A" strokeWidth="2.5" />
+        <path d="M40 12L62 23V42C62 55 52 65 40 70C28 65 18 55 18 42V23L40 12Z" fill="#0D1117" />
+        <path d="M27 32L33 26L40 33L47 26L53 32V44L48 50H32L27 44V32Z" fill="#C9992A" opacity="0.82" />
+        <circle cx="35" cy="34" r="2" fill="#F5D07A" />
+        <circle cx="45" cy="34" r="2" fill="#F5D07A" />
+        <path d="M37 40C38 42 42 42 43 40" stroke="#F5D07A" strokeWidth="1.4" strokeLinecap="round" />
+      </svg>
+    </div>
+  );
+}
+
 export function BidDashboard() {
   const defaults = masterCatalog.defaults;
   const [state, setState] = useState<DashboardState>({
@@ -163,10 +178,15 @@ export function BidDashboard() {
   };
 
   return (
-    <div className="dashboard-grid">
+    <div className="bid-console">
       <aside className="tool-panel">
-        <h2>Bid Controls</h2>
-        <p>Change the same levers the master workbook uses, without hunting through hidden Excel tabs.</p>
+        <div className="panel-title-row">
+          <VulpineLogo />
+          <div>
+            <h2>Mike-Logic Controls</h2>
+            <p>Master sheet rates and overrides.</p>
+          </div>
+        </div>
 
         <label>Construction Type</label>
         <select value={state.style} onChange={(event) => changeStyle(event.target.value as StyleName)}>
@@ -217,14 +237,16 @@ export function BidDashboard() {
       </aside>
 
       <section>
-        <div className="page-heading">
+        <div className="dashboard-hero">
           <div>
-            <h1>Dashboard</h1>
+            <div className="micro-label">VULPINE LLC · MASTER-DERIVED BID ENGINE</div>
+            <h1>Cabinet Bid Dashboard</h1>
             <p>Paste SKUs and quantities. The tool prices against the master catalog for the selected style and finish.</p>
           </div>
-          <div>
-            <div className="source-note">Grand Total</div>
-            <strong style={{ color: "var(--gold-2)", fontSize: 42 }}>{money(result.grandTotal)}</strong>
+          <div className="grand-total-card">
+            <span>Grand Total Bid</span>
+            <strong>{money(result.grandTotal)}</strong>
+            <small>{state.style} · {state.finish} · {Math.round(state.priceMargin * 100)}% margin</small>
           </div>
         </div>
 
