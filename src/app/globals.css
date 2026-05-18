@@ -465,6 +465,22 @@ textarea {
   line-height: 1;
 }
 
+.print-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 14px;
+  border: 1px solid rgba(201, 153, 42, 0.5);
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f5d07a 0%, #c9992a 100%);
+  color: #080c14;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.print-quote {
+  display: none;
+}
+
 .table-wrap {
   overflow: auto;
   max-height: 660px;
@@ -642,5 +658,170 @@ tr.missing td {
   .stat-row,
   .control-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .topbar,
+  .no-print {
+    display: none !important;
+  }
+
+  .page,
+  .shell {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-quote {
+    display: block;
+    color: #111827;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .print-quote-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    border-bottom: 3px solid #111827;
+  }
+
+  .print-quote-header h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 34px;
+    letter-spacing: 0;
+  }
+
+  .print-quote-header p,
+  .print-date span,
+  .print-summary span,
+  .print-totals span,
+  .print-footer {
+    color: #4b5563;
+  }
+
+  .print-date {
+    text-align: right;
+  }
+
+  .print-date span,
+  .print-summary span,
+  .print-totals span {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .print-date strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 18px;
+  }
+
+  .print-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .print-summary div,
+  .print-totals div {
+    border: 1px solid #d1d5db;
+    border-radius: 0;
+    padding: 12px;
+    background: #f9fafb;
+  }
+
+  .print-summary strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 16px;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+
+  .print-table th {
+    position: static;
+    background: #111827 !important;
+    color: #ffffff !important;
+    padding: 9px;
+    border: 1px solid #111827;
+    text-align: left;
+  }
+
+  .print-table td {
+    color: #111827;
+    padding: 9px;
+    border: 1px solid #d1d5db;
+  }
+
+  .print-table td:nth-child(3),
+  .print-table td:nth-child(4),
+  .print-table td:nth-child(5),
+  .print-table th:nth-child(3),
+  .print-table th:nth-child(4),
+  .print-table th:nth-child(5) {
+    text-align: right;
+  }
+
+  .print-totals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+    page-break-inside: avoid;
+  }
+
+  .print-totals strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 18px;
+  }
+
+  .print-grand-total {
+    grid-column: span 3;
+    background: #111827 !important;
+    color: #ffffff !important;
+    border-color: #111827 !important;
+  }
+
+  .print-grand-total span,
+  .print-grand-total strong {
+    color: #ffffff !important;
+  }
+
+  .print-grand-total strong {
+    font-size: 30px;
+  }
+
+  .print-footer {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid #d1d5db;
+    font-size: 10px;
+    line-height: 1.45;
   }
 }

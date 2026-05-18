@@ -172,7 +172,8 @@ export function BidDashboard() {
   };
 
   return (
-    <div className="bid-console">
+    <>
+    <div className="bid-console no-print">
       <aside className="tool-panel">
         <div className="panel-title-row">
           <VulpineLogo />
@@ -241,6 +242,9 @@ export function BidDashboard() {
             <span>Grand Total Bid</span>
             <strong>{money(result.grandTotal)}</strong>
             <small>{state.style} · {state.finish} · {Math.round(state.priceMargin * 100)}% margin</small>
+            <button className="print-button" type="button" onClick={() => window.print()}>
+              Print Customer PDF
+            </button>
           </div>
         </div>
 
@@ -306,5 +310,95 @@ export function BidDashboard() {
         </div>
       </section>
     </div>
+    <section className="print-quote">
+      <div className="print-quote-header">
+        <div>
+          <h1>Cabinet Proposal</h1>
+          <p>Customer line item summary</p>
+        </div>
+        <div className="print-date">
+          <span>Date</span>
+          <strong>{new Date().toLocaleDateString()}</strong>
+        </div>
+      </div>
+
+      <div className="print-summary">
+        <div>
+          <span>Cabinet Style</span>
+          <strong>{state.style}</strong>
+        </div>
+        <div>
+          <span>Finish</span>
+          <strong>{state.finish}</strong>
+        </div>
+        <div>
+          <span>Unit Quantity</span>
+          <strong>{state.unitQty}</strong>
+        </div>
+      </div>
+
+      <table className="print-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result.lines
+            .filter((line) => line.found)
+            .map((line, index) => (
+              <tr key={`${line.sku}-print-${index}`}>
+                <td>{line.sku}</td>
+                <td>{line.item?.description}</td>
+                <td>{line.qty}</td>
+                <td>{exactMoney(line.unitPrice)}</td>
+                <td>{exactMoney(line.lineTotal)}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+
+      <div className="print-totals">
+        <div>
+          <span>Cabinet Total</span>
+          <strong>{money(result.cabinetAfterDiscount)}</strong>
+        </div>
+        <div>
+          <span>Build / Assembly</span>
+          <strong>{money(result.buildRevenue)}</strong>
+        </div>
+        <div>
+          <span>Hardware</span>
+          <strong>{money(result.handleRevenue)}</strong>
+        </div>
+        <div>
+          <span>Delivery</span>
+          <strong>{money(result.shipping)}</strong>
+        </div>
+        {state.includeInstall ? (
+          <div>
+            <span>Installation</span>
+            <strong>{money(result.install)}</strong>
+          </div>
+        ) : null}
+        <div className="print-grand-total">
+          <span>Total Proposal</span>
+          <strong>{money(result.grandTotal)}</strong>
+        </div>
+      </div>
+
+      <div className="print-footer">
+        <p>
+          This proposal is based on the listed cabinet selections, finish, quantities, delivery, and selected services.
+          Final pricing may change with field measurements, change orders, unavailable products, taxes, or project-specific
+          requirements.
+        </p>
+      </div>
+    </section>
+    </>
   );
 }
