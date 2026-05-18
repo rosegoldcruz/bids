@@ -25,7 +25,7 @@ export default function RootLayout({
           <div className="shell topbar-inner">
             <Link className="brand" href="/">
               <span className="brand-mark image-mark">
-                <Image src="/brand/vulpine-logo.svg" alt="" width={60} height={60} priority />
+                <Image src="/brand/shield.png" alt="" width={44} height={44} priority />
               </span>
               <span>
                 Vulpine <em>Bid Engine</em>
@@ -34,6 +34,7 @@ export default function RootLayout({
             <nav className="nav" aria-label="Main navigation">
               <Link href="/price-sheets">Price Sheets</Link>
               <Link href="/dashboard">Dashboard</Link>
+              <Link href="/how-to-use">How To Use</Link>
             </nav>
           </div>
         </div>

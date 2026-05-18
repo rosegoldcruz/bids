@@ -95,9 +95,10 @@ textarea {
 }
 
 .brand-mark img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .nav {
@@ -321,9 +322,10 @@ textarea {
 }
 
 .vulpine-logo img {
-  width: 104px;
-  height: 104px;
-  object-fit: contain;
+  width: 66px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .tool-panel label {
@@ -607,6 +609,157 @@ tr.missing td {
   line-height: 1.5;
 }
 
+.guide-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.guide-hero,
+.guide-section,
+.guide-card {
+  border: 1px solid rgba(28, 35, 51, 0.98);
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(8, 12, 20, 0.98));
+  border-radius: 14px;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.24);
+}
+
+.guide-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 28px;
+}
+
+.guide-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.guide-brand img {
+  width: 96px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.35));
+}
+
+.guide-hero h1,
+.guide-section h2,
+.guide-card h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0;
+}
+
+.guide-hero h1 {
+  font-size: clamp(34px, 4.5vw, 64px);
+  line-height: 0.98;
+}
+
+.guide-hero p,
+.guide-section p,
+.guide-card p,
+.guide-list {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.guide-contact {
+  color: var(--gold-2) !important;
+  font-weight: 900;
+}
+
+.guide-actions {
+  display: grid;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.guide-card,
+.guide-section {
+  padding: 24px;
+}
+
+.guide-card > span {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(201, 153, 42, 0.55);
+  border-radius: 8px;
+  color: var(--gold-2);
+  font-weight: 900;
+}
+
+.guide-card h2,
+.guide-section h2 {
+  font-size: 26px;
+}
+
+.guide-two-column,
+.definition-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.guide-list {
+  margin: 14px 0 0;
+  padding-left: 22px;
+}
+
+.guide-list li {
+  margin: 8px 0;
+}
+
+.example-box,
+.definition-grid div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  background: #0b1118;
+}
+
+.example-box span {
+  display: block;
+  color: var(--gold-2);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.example-box pre {
+  margin: 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #05070b;
+  color: var(--text);
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.definition-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.definition-grid strong {
+  color: var(--gold-2);
+}
+
+.warning-section {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
 @media (max-width: 1080px) {
   .hero,
   .dashboard-grid,
@@ -619,6 +772,18 @@ tr.missing td {
   }
 
   .catalog-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-hero,
+  .guide-two-column {
+    align-items: stretch;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .guide-grid,
+  .definition-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -664,7 +829,7 @@ tr.missing td {
 @media print {
   @page {
     size: letter;
-    margin: 0.5in;
+    margin: 0.35in;
   }
 
   html,
@@ -690,37 +855,89 @@ tr.missing td {
     display: block;
     color: #111827;
     font-family: Arial, Helvetica, sans-serif;
+    min-height: 10.3in;
+    border: 2px solid #111827;
+    padding: 0.22in;
+    position: relative;
   }
 
   .print-quote-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    padding-bottom: 18px;
-    border-bottom: 3px solid #111827;
+    gap: 20px;
+    padding: 16px 18px;
+    background: #111827 !important;
+    color: #ffffff !important;
+    border-bottom: 5px solid #c9992a;
   }
 
-  .print-quote-header h1 {
+  .print-brand-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .print-logo {
+    width: 84px;
+    height: 92px;
+    object-fit: contain;
+    background: #ffffff;
+    border: 2px solid #c9992a;
+    padding: 5px;
+  }
+
+  .print-brand-block span,
+  .print-company-card span {
+    display: block;
+    color: #f5d07a !important;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .print-brand-block h1 {
     margin: 0;
-    color: #111827;
-    font-size: 34px;
+    color: #ffffff !important;
+    font-size: 38px;
     letter-spacing: 0;
+    font-family: Georgia, "Times New Roman", serif;
   }
 
-  .print-quote-header p,
-  .print-date span,
+  .print-brand-block p,
+  .print-company-card p,
+  .print-company-card strong {
+    color: #ffffff !important;
+  }
+
+  .print-brand-block p {
+    margin: 4px 0 0;
+    font-size: 13px;
+  }
+
+  .print-company-card {
+    min-width: 190px;
+    text-align: right;
+  }
+
+  .print-company-card strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+  }
+
+  .print-company-card p {
+    margin: 4px 0 0;
+    font-size: 12px;
+  }
+
   .print-summary span,
   .print-totals span,
   .print-footer {
     color: #4b5563;
   }
 
-  .print-date {
-    text-align: right;
-  }
-
-  .print-date span,
   .print-summary span,
   .print-totals span {
     display: block;
@@ -730,51 +947,50 @@ tr.missing td {
     text-transform: uppercase;
   }
 
-  .print-date strong {
-    display: block;
-    margin-top: 6px;
-    font-size: 18px;
-  }
-
   .print-summary {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 20px 0;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 16px 0;
   }
 
   .print-summary div,
   .print-totals div {
-    border: 1px solid #d1d5db;
+    border: 1px solid #cbd5e1;
     border-radius: 0;
-    padding: 12px;
-    background: #f9fafb;
+    padding: 10px;
+    background: #f8fafc;
   }
 
   .print-summary strong {
     display: block;
-    margin-top: 6px;
-    font-size: 16px;
+    margin-top: 5px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
   }
 
   .print-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
+    font-size: 10.5px;
+    box-shadow: 0 0 0 2px #111827;
   }
 
   .print-table th {
     position: static;
     background: #111827 !important;
     color: #ffffff !important;
-    padding: 9px;
+    padding: 8px;
     border: 1px solid #111827;
     text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .print-table td {
     color: #111827;
-    padding: 9px;
+    padding: 8px;
     border: 1px solid #d1d5db;
   }
 
@@ -790,22 +1006,23 @@ tr.missing td {
   .print-totals {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 16px;
     page-break-inside: avoid;
   }
 
   .print-totals strong {
     display: block;
     margin-top: 6px;
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .print-grand-total {
     grid-column: span 3;
-    background: #111827 !important;
+    background: linear-gradient(135deg, #111827 0%, #263142 100%) !important;
     color: #ffffff !important;
     border-color: #111827 !important;
+    padding: 14px !important;
   }
 
   .print-grand-total span,
@@ -814,14 +1031,19 @@ tr.missing td {
   }
 
   .print-grand-total strong {
-    font-size: 30px;
+    font-size: 34px;
+    font-family: Georgia, "Times New Roman", serif;
   }
 
   .print-footer {
-    margin-top: 18px;
-    padding-top: 12px;
-    border-top: 1px solid #d1d5db;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 2px solid #c9992a;
     font-size: 10px;
     line-height: 1.45;
+  }
+
+  .print-footer p {
+    margin: 0 0 5px;
   }
 }

@@ -27,6 +27,10 @@ function parseLines(text: string): LineInput[] {
 type DashboardState = {
   style: StyleName;
   finish: string;
+  customerName: string;
+  projectName: string;
+  companyPhone: string;
+  companyEmail: string;
   unitQty: number;
   priceMargin: number;
   discount: number;
@@ -135,7 +139,7 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 function VulpineLogo() {
   return (
     <div className="vulpine-logo" aria-hidden="true">
-      <Image src="/brand/vulpine-logo.svg" alt="" width={104} height={113} />
+      <Image src="/brand/shield.png" alt="" width={72} height={72} />
     </div>
   );
 }
@@ -145,6 +149,10 @@ export function BidDashboard() {
   const [state, setState] = useState<DashboardState>({
     style: defaults.style,
     finish: defaults.finishByStyle[defaults.style],
+    customerName: "",
+    projectName: "",
+    companyPhone: "480-364-8205",
+    companyEmail: "sales@vulpinehomes.com",
     unitQty: 1,
     priceMargin: defaults.priceMargin,
     discount: defaults.discount,
@@ -199,6 +207,41 @@ export function BidDashboard() {
         </select>
 
         <NumberField label="Unit Quantity" value={state.unitQty} onChange={(unitQty) => patch({ unitQty })} />
+
+        <label>Customer Name</label>
+        <input
+          className="field"
+          placeholder="Customer name for printed proposal"
+          value={state.customerName}
+          onChange={(event) => patch({ customerName: event.target.value })}
+        />
+
+        <label>Project Name / Address</label>
+        <input
+          className="field"
+          placeholder="Project name or address"
+          value={state.projectName}
+          onChange={(event) => patch({ projectName: event.target.value })}
+        />
+
+        <div className="control-grid">
+          <div>
+            <label>Vulpine Phone</label>
+            <input
+              className="field"
+              value={state.companyPhone}
+              onChange={(event) => patch({ companyPhone: event.target.value })}
+            />
+          </div>
+          <div>
+            <label>Vulpine Email</label>
+            <input
+              className="field"
+              value={state.companyEmail}
+              onChange={(event) => patch({ companyEmail: event.target.value })}
+            />
+          </div>
+        </div>
 
         <label>Price Margin: {Math.round(state.priceMargin * 100)}%</label>
         <input
@@ -312,17 +355,32 @@ export function BidDashboard() {
     </div>
     <section className="print-quote">
       <div className="print-quote-header">
-        <div>
-          <h1>Cabinet Proposal</h1>
-          <p>Customer line item summary</p>
+        <div className="print-brand-block">
+          <Image className="print-logo" src="/brand/vulpine-logo.svg" alt="Vulpine LLC" width={132} height={144} />
+          <div>
+            <span>Vulpine LLC</span>
+            <h1>Cabinet Proposal</h1>
+            <p>Customer cabinet line item proposal</p>
+          </div>
         </div>
-        <div className="print-date">
-          <span>Date</span>
-          <strong>{new Date().toLocaleDateString()}</strong>
+        <div className="print-company-card">
+          <span>Prepared By</span>
+          <strong>Vulpine LLC</strong>
+          <p>{state.companyPhone}</p>
+          <p>{state.companyEmail}</p>
+          <p>{new Date().toLocaleDateString()}</p>
         </div>
       </div>
 
       <div className="print-summary">
+        <div>
+          <span>Customer</span>
+          <strong>{state.customerName || "Customer"}</strong>
+        </div>
+        <div>
+          <span>Project</span>
+          <strong>{state.projectName || "Cabinet Package"}</strong>
+        </div>
         <div>
           <span>Cabinet Style</span>
           <strong>{state.style}</strong>
@@ -332,8 +390,8 @@ export function BidDashboard() {
           <strong>{state.finish}</strong>
         </div>
         <div>
-          <span>Unit Quantity</span>
-          <strong>{state.unitQty}</strong>
+          <span>Total Cabinet Pieces</span>
+          <strong>{result.totalBoxes}</strong>
         </div>
       </div>
 
@@ -354,9 +412,9 @@ export function BidDashboard() {
               <tr key={`${line.sku}-print-${index}`}>
                 <td>{line.sku}</td>
                 <td>{line.item?.description}</td>
-                <td>{line.qty}</td>
+                <td>{line.qty * Math.max(1, state.unitQty || 1)}</td>
                 <td>{exactMoney(line.unitPrice)}</td>
-                <td>{exactMoney(line.lineTotal)}</td>
+                <td>{exactMoney(line.lineTotal * Math.max(1, state.unitQty || 1))}</td>
               </tr>
             ))}
         </tbody>
@@ -392,6 +450,9 @@ export function BidDashboard() {
       </div>
 
       <div className="print-footer">
+        <p>
+          Vulpine LLC | {state.companyPhone} | {state.companyEmail}
+        </p>
         <p>
           This proposal is based on the listed cabinet selections, finish, quantities, delivery, and selected services.
           Final pricing may change with field measurements, change orders, unavailable products, taxes, or project-specific
