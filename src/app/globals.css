@@ -479,6 +479,71 @@ textarea {
   font-weight: 900;
 }
 
+.mobile-print-note,
+.mobile-line-list {
+  display: none;
+}
+
+.mobile-print-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mobile-line-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  background: #080c14;
+}
+
+.mobile-line-card.missing {
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.mobile-line-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobile-line-top strong {
+  color: var(--gold-2);
+  font-size: 16px;
+}
+
+.mobile-line-top span {
+  color: var(--text);
+  font-weight: 900;
+}
+
+.mobile-line-card p {
+  margin: 8px 0 10px;
+  color: #dbe4ee;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.mobile-line-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mobile-line-meta span {
+  border: 1px solid rgba(143, 157, 172, 0.28);
+  border-radius: 999px;
+  padding: 5px 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .print-quote {
   display: none;
 }
@@ -789,8 +854,55 @@ tr.missing td {
 }
 
 @media (max-width: 700px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   .shell {
-    width: min(100% - 24px, 1500px);
+    width: min(100% - 14px, 1500px);
+  }
+
+  .page {
+    padding: 10px 0 84px;
+  }
+
+  .topbar {
+    position: static;
+  }
+
+  .topbar-inner {
+    min-height: auto;
+    padding: 10px 0;
+    gap: 10px;
+  }
+
+  .brand {
+    font-size: 15px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .brand-mark img {
+    width: 33px;
+    height: 33px;
+  }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 6px;
+  }
+
+  .nav a {
+    min-height: 38px;
+    padding: 9px 6px;
+    text-align: center;
+    font-size: 12px;
   }
 
   .topbar-inner,
@@ -804,10 +916,15 @@ tr.missing td {
   .grand-total-card {
     min-width: 0;
     text-align: left;
+    position: sticky;
+    top: 8px;
+    z-index: 10;
+    padding: 14px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
   }
 
-  .nav {
-    flex-wrap: wrap;
+  .grand-total-card strong {
+    font-size: 40px;
   }
 
   .hero-main {
@@ -823,6 +940,123 @@ tr.missing td {
   .stat-row,
   .control-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bid-console,
+  .dashboard-grid {
+    gap: 12px;
+  }
+
+  .tool-panel,
+  .dashboard-hero,
+  .stat-card {
+    border-radius: 10px;
+  }
+
+  .tool-panel {
+    padding: 14px;
+  }
+
+  .panel-title-row {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .vulpine-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+  }
+
+  .vulpine-logo img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .tool-panel h2 {
+    font-size: 20px;
+  }
+
+  .tool-panel label {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  .field,
+  .tool-panel select,
+  .tool-panel input,
+  .tool-panel textarea,
+  .catalog-search {
+    min-height: 46px;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  .tool-panel textarea {
+    min-height: 220px;
+  }
+
+  .dashboard-hero {
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 14px;
+  }
+
+  .dashboard-hero h1 {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .dashboard-hero p {
+    font-size: 13px;
+  }
+
+  .micro-label {
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .stat-row {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .stat-card strong {
+    margin-top: 0;
+    font-size: 20px;
+    text-align: right;
+  }
+
+  .print-button {
+    min-height: 52px;
+    border-radius: 12px;
+    font-size: 16px;
+  }
+
+  .mobile-print-note {
+    display: block;
+  }
+
+  .mobile-line-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .dashboard-grid .table-wrap {
+    display: none;
+  }
+
+  .table-wrap {
+    max-height: none;
   }
 }
 

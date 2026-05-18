@@ -288,6 +288,7 @@ export function BidDashboard() {
             <button className="print-button" type="button" onClick={() => window.print()}>
               Print Customer PDF
             </button>
+            <p className="mobile-print-note">On phone: tap this, then use your browser share/print option to save or send the PDF.</p>
           </div>
         </div>
 
@@ -312,6 +313,22 @@ export function BidDashboard() {
 
           <div className="tool-panel">
             <h2>Line Items</h2>
+            <div className="mobile-line-list">
+              {result.lines.map((line, index) => (
+                <article className={line.found ? "mobile-line-card" : "mobile-line-card missing"} key={`${line.sku}-mobile-${index}`}>
+                  <div className="mobile-line-top">
+                    <strong>{line.sku}</strong>
+                    <span>{line.found ? exactMoney(line.lineTotal) : "Missing"}</span>
+                  </div>
+                  <p>{line.item?.description || "Missing from selected master catalog"}</p>
+                  <div className="mobile-line-meta">
+                    <span>Qty {line.qty}</span>
+                    <span>Unit {exactMoney(line.unitPrice)}</span>
+                    <span>{line.item?.type || "missing"}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
             <div className="table-wrap">
               <table>
                 <thead>
