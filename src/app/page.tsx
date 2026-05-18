@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { masterCatalog } from "@/lib/catalog";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <div className="shell hero">
         <section className="hero-main">
           <div>
+            <Image className="hero-logo" src="/brand/vulpine-logo.svg" alt="Vulpine" width={280} height={304} priority />
             <h1>Vulpine cabinet command center.</h1>
             <p className="hero-copy">
               Two giant buttons. One opens the master-derived HTML price sheets. One opens the actual bid dashboard.

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { exactMoney, masterCatalog, masterFactor, money, type CatalogItem, type StyleName } from "@/lib/catalog";
 
@@ -134,14 +135,7 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 function VulpineLogo() {
   return (
     <div className="vulpine-logo" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M40 4L70 18V42C70 58 56 70 40 76C24 70 10 58 10 42V18L40 4Z" fill="#1C2333" stroke="#C9992A" strokeWidth="2.5" />
-        <path d="M40 12L62 23V42C62 55 52 65 40 70C28 65 18 55 18 42V23L40 12Z" fill="#0D1117" />
-        <path d="M27 32L33 26L40 33L47 26L53 32V44L48 50H32L27 44V32Z" fill="#C9992A" opacity="0.82" />
-        <circle cx="35" cy="34" r="2" fill="#F5D07A" />
-        <circle cx="45" cy="34" r="2" fill="#F5D07A" />
-        <path d="M37 40C38 42 42 42 43 40" stroke="#F5D07A" strokeWidth="1.4" strokeLinecap="round" />
-      </svg>
+      <Image src="/brand/vulpine-logo.svg" alt="" width={104} height={113} />
     </div>
   );
 }
