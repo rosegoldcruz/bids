@@ -1569,21 +1569,6 @@ tr.missing td {
     display: none !important;
   }
 
-  .topbar {
-    display: none !important;
-  }
-
-  .page, .shell {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .page-heading {
-    display: none !important;
-  }
-
   .cb-print-header {
     display: flex;
     align-items: center;

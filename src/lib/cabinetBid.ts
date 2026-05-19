@@ -96,15 +96,6 @@ export function calculateBid(project: ProjectFields, units: UnitRow[]): BidCalc 
   };
 }
 
-export function exactMoney2(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value || 0);
-}
-
 export function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
@@ -125,25 +116,27 @@ export const DEMO_PROJECT: ProjectFields = {
   installationTotal: 187000,
   buildCost: 44000,
   shippingCost: 13350,
-  taxRate: 0.074,
-  handleUnitCost: 2.875,
+  taxRate: 0.0792,
+  handleUnitCost: 2.87,
 };
 
-export const DEMO_UNITS: UnitRow[] = [
-  { id: uid(), product: "F\nr\na\nm\ne\nl\ne\ns\ns", unitType: "1A", quantity: 24, unitPrice: 6752.74, cabinetsPerUnit: 23, hardwarePerUnit: 53, notes: "" },
-  { id: uid(), product: "", unitType: "1B1", quantity: 8, unitPrice: 5386.27, cabinetsPerUnit: 19, hardwarePerUnit: 42, notes: "" },
-  { id: uid(), product: "", unitType: "1B2", quantity: 2, unitPrice: 5563.23, cabinetsPerUnit: 19, hardwarePerUnit: 45, notes: "" },
-  { id: uid(), product: "", unitType: "1B3", quantity: 4, unitPrice: 5553.52, cabinetsPerUnit: 20, hardwarePerUnit: 45, notes: "" },
-  { id: uid(), product: "", unitType: "1C", quantity: 9, unitPrice: 6462.84, cabinetsPerUnit: 21, hardwarePerUnit: 48, notes: "" },
-  { id: uid(), product: "", unitType: "1D - TYPE A", quantity: 1, unitPrice: 6940.09, cabinetsPerUnit: 23, hardwarePerUnit: 54, notes: "" },
-  { id: uid(), product: "", unitType: "2A1", quantity: 24, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
-  { id: uid(), product: "", unitType: "2A2", quantity: 6, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
-  { id: uid(), product: "", unitType: "2A3", quantity: 1, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
-  { id: uid(), product: "", unitType: "2A3 - TYPE A", quantity: 1, unitPrice: 9069.35, cabinetsPerUnit: 31, hardwarePerUnit: 71, notes: "" },
-  { id: uid(), product: "", unitType: "2B", quantity: 3, unitPrice: 8273.78, cabinetsPerUnit: 28, hardwarePerUnit: 65, notes: "" },
-  { id: uid(), product: "", unitType: "2C1", quantity: 3, unitPrice: 8464.19, cabinetsPerUnit: 31, hardwarePerUnit: 70, notes: "" },
-  { id: uid(), product: "", unitType: "2C2", quantity: 3, unitPrice: 8685.22, cabinetsPerUnit: 30, hardwarePerUnit: 69, notes: "" },
-];
+export function makeDemoUnits(): UnitRow[] {
+  return [
+    { id: uid(), product: "Frameless", unitType: "1A", quantity: 24, unitPrice: 6752.74, cabinetsPerUnit: 23, hardwarePerUnit: 53, notes: "" },
+    { id: uid(), product: "", unitType: "1B1", quantity: 8, unitPrice: 5386.27, cabinetsPerUnit: 19, hardwarePerUnit: 42, notes: "" },
+    { id: uid(), product: "", unitType: "1B2", quantity: 2, unitPrice: 5563.23, cabinetsPerUnit: 19, hardwarePerUnit: 45, notes: "" },
+    { id: uid(), product: "", unitType: "1B3", quantity: 4, unitPrice: 5553.52, cabinetsPerUnit: 20, hardwarePerUnit: 45, notes: "" },
+    { id: uid(), product: "", unitType: "1C", quantity: 9, unitPrice: 6462.84, cabinetsPerUnit: 21, hardwarePerUnit: 48, notes: "" },
+    { id: uid(), product: "", unitType: "1D - TYPE A", quantity: 1, unitPrice: 6940.09, cabinetsPerUnit: 23, hardwarePerUnit: 54, notes: "" },
+    { id: uid(), product: "", unitType: "2A1", quantity: 24, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
+    { id: uid(), product: "", unitType: "2A2", quantity: 6, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
+    { id: uid(), product: "", unitType: "2A3", quantity: 1, unitPrice: 8533.43, cabinetsPerUnit: 28, hardwarePerUnit: 66, notes: "" },
+    { id: uid(), product: "", unitType: "2A3 - TYPE A", quantity: 1, unitPrice: 9069.35, cabinetsPerUnit: 31, hardwarePerUnit: 71, notes: "" },
+    { id: uid(), product: "", unitType: "2B", quantity: 3, unitPrice: 8273.78, cabinetsPerUnit: 28, hardwarePerUnit: 65, notes: "" },
+    { id: uid(), product: "", unitType: "2C1", quantity: 3, unitPrice: 8464.19, cabinetsPerUnit: 31, hardwarePerUnit: 70, notes: "" },
+    { id: uid(), product: "", unitType: "2C2", quantity: 3, unitPrice: 8685.22, cabinetsPerUnit: 30, hardwarePerUnit: 69, notes: "" },
+  ];
+}
 
 export const STORAGE_KEY = "cabinet_bid_v1";
 
@@ -153,7 +146,7 @@ export function validateProject(p: ProjectFields): string[] {
     errors.push("Expected Total Units must be a non-negative integer.");
   if (p.buildCost < 0) errors.push("Build cost must be non-negative.");
   if (p.shippingCost < 0) errors.push("Shipping cost must be non-negative.");
-  if (p.taxRate < 0) errors.push("Tax rate must be 0 or greater.");
+  if (p.taxRate < 0 || p.taxRate > 1) errors.push("Tax rate must be between 0 and 1 (e.g. 0.074 for 7.4%).");
   if (p.installationTotal < 0) errors.push("Installation total must be non-negative.");
   if (p.handleUnitCost < 0) errors.push("Handle unit cost must be non-negative.");
   return errors;

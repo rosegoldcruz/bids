@@ -1,14 +1,14 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
+import { exactMoney } from "@/lib/catalog";
 import {
   calculateBid,
-  exactMoney2,
   uid,
   validateProject,
   validateRow,
   DEMO_PROJECT,
-  DEMO_UNITS,
+  makeDemoUnits,
   STORAGE_KEY,
   type ProjectFields,
   type UnitRow,
@@ -54,7 +54,23 @@ function loadFromStorage(): { project: ProjectFields; units: UnitRow[] } | null 
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    // Merge with defaults so stale/missing keys don't cause runtime errors
+    const project: ProjectFields = { ...DEFAULT_PROJECT, ...(parsed.project ?? {}) };
+    const units: UnitRow[] = Array.isArray(parsed.units)
+      ? parsed.units.map((u: Partial<UnitRow>) => ({
+          id: u.id ?? uid(),
+          product: u.product ?? "",
+          unitType: u.unitType ?? "",
+          quantity: Number(u.quantity) || 0,
+          unitPrice: Number(u.unitPrice) || 0,
+          cabinetsPerUnit: Number(u.cabinetsPerUnit) || 0,
+          hardwarePerUnit: Number(u.hardwarePerUnit) || 0,
+          notes: u.notes ?? "",
+        }))
+      : [emptyRow()];
+    return { project, units };
   } catch {
     return null;
   }
@@ -130,7 +146,7 @@ function NumField({
 
 // ─── CSV Export ───────────────────────────────────────────────────────────────
 
-function exportCSV(project: ProjectFields, units: UnitRow[], calc: ReturnType<typeof calculateBid>) {
+function exportCSV(project: ProjectFields, calc: ReturnType<typeof calculateBid>) {
   const rows: string[][] = [
     ["Cabinet Bid Summary"],
     ["Project", project.projectName],
@@ -171,7 +187,8 @@ function exportCSV(project: ProjectFields, units: UnitRow[], calc: ReturnType<ty
   a.href = url;
   a.download = `${project.projectName || "cabinet-bid"}.csv`;
   a.click();
-  URL.revokeObjectURL(url);
+  // Defer revocation so the browser has time to initiate the download
+  setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -242,7 +259,7 @@ export function CabinetBidSummary() {
 
   const handleLoadDemo = () => {
     setProject(DEMO_PROJECT);
-    setUnits(DEMO_UNITS.map((u) => ({ ...u, id: uid() })));
+    setUnits(makeDemoUnits());
     setSaveMsg("Demo data loaded.");
     setTimeout(() => setSaveMsg(""), 3000);
   };
@@ -263,7 +280,7 @@ export function CabinetBidSummary() {
           <button className="cb-btn cb-btn-secondary" type="button" onClick={handleLoad}>Load Saved</button>
           <button className="cb-btn cb-btn-secondary" type="button" onClick={handleLoadDemo}>Load Demo</button>
           <button className="cb-btn cb-btn-secondary" type="button" onClick={handleClear}>Clear</button>
-          <button className="cb-btn cb-btn-secondary" type="button" onClick={() => exportCSV(project, units, calc)}>Export CSV</button>
+          <button className="cb-btn cb-btn-secondary" type="button" onClick={() => exportCSV(project, calc)}>Export CSV</button>
           <button className="cb-btn cb-btn-secondary" type="button" onClick={() => window.print()}>Print / PDF</button>
           {saveMsg && <span className="cb-save-msg">{saveMsg}</span>}
         </div>
@@ -301,7 +318,7 @@ export function CabinetBidSummary() {
             <NumField label="Installation Total ($)" value={project.installationTotal} onChange={(v) => patchProject({ installationTotal: v })} step={100} />
             <NumField label="Build Cost ($)" value={project.buildCost} onChange={(v) => patchProject({ buildCost: v })} step={100} />
             <NumField label="Shipping Cost ($)" value={project.shippingCost} onChange={(v) => patchProject({ shippingCost: v })} step={100} />
-            <NumField label="Tax Rate (e.g. 0.074)" value={project.taxRate} onChange={(v) => patchProject({ taxRate: v })} step={0.001} />
+            <NumField label="Tax Rate decimal (e.g. 0.0792 = 7.92%)" value={project.taxRate} onChange={(v) => patchProject({ taxRate: v })} step={0.0001} />
             <NumField label="Handle Unit Cost ($)" value={project.handleUnitCost} onChange={(v) => patchProject({ handleUnitCost: v })} step={0.01} />
 
             <h2 className="cb-section-title" style={{ marginTop: 20 }}>General Specs</h2>
@@ -406,8 +423,8 @@ export function CabinetBidSummary() {
                         </td>
                         <td>
                           <div className="cb-row-actions">
-                            <button className="cb-icon-btn" title="Duplicate" onClick={() => duplicateRow(row.id)}>⧉</button>
-                            <button className="cb-icon-btn cb-icon-danger" title="Remove" onClick={() => removeRow(row.id)}>✕</button>
+                            <button type="button" className="cb-icon-btn" aria-label={`Duplicate row ${row.unitType || "unit"}`} title="Duplicate" onClick={() => duplicateRow(row.id)}>⧉</button>
+                            <button type="button" className="cb-icon-btn cb-icon-danger" aria-label={`Remove row ${row.unitType || "unit"}`} title="Remove" onClick={() => removeRow(row.id)}>✕</button>
                           </div>
                         </td>
                       </tr>
@@ -440,8 +457,8 @@ export function CabinetBidSummary() {
                         <td>{r.product}</td>
                         <td>{r.unitType || <span style={{ color: "var(--red)" }}>—</span>}</td>
                         <td className="cb-right">{r.quantity}</td>
-                        <td className="cb-right">{exactMoney2(r.unitPrice)}</td>
-                        <td className="cb-right">{exactMoney2(r.rowTotal)}</td>
+                        <td className="cb-right">{exactMoney(r.unitPrice)}</td>
+                        <td className="cb-right">{exactMoney(r.rowTotal)}</td>
                         <td className="cb-right">{r.rowTotalCabinets}</td>
                         <td className="cb-right">{r.rowHardwareCount}</td>
                       </tr>
@@ -453,49 +470,49 @@ export function CabinetBidSummary() {
                       <td><strong>Cabinets</strong></td>
                       <td className="cb-right"><strong>{calc.enteredTotalUnits}</strong></td>
                       <td></td>
-                      <td className="cb-right"><strong>{exactMoney2(calc.cabinetSubtotal)}</strong></td>
+                      <td className="cb-right"><strong>{exactMoney(calc.cabinetSubtotal)}</strong></td>
                       <td className="cb-right"><strong>{calc.totalCabinets}</strong></td>
                       <td className="cb-right"><strong>{calc.totalHardwareCount}</strong></td>
                     </tr>
                     <tr className="cb-sub-row">
                       <td colSpan={3}></td>
                       <td><strong>Handles</strong></td>
-                      <td className="cb-right">{exactMoney2(calc.handlesTotal)}</td>
+                      <td className="cb-right">{exactMoney(calc.handlesTotal)}</td>
                       <td colSpan={2}></td>
                     </tr>
                     <tr className="cb-sub-row">
                       <td colSpan={3}></td>
                       <td><strong>Build Cost</strong></td>
-                      <td className="cb-right">{exactMoney2(project.buildCost)}</td>
+                      <td className="cb-right">{exactMoney(project.buildCost)}</td>
                       <td colSpan={2}></td>
                     </tr>
                     <tr className="cb-sub-row">
                       <td colSpan={3}></td>
                       <td><strong>Shipping</strong></td>
-                      <td className="cb-right">{exactMoney2(project.shippingCost)}</td>
+                      <td className="cb-right">{exactMoney(project.shippingCost)}</td>
                       <td colSpan={2}></td>
                     </tr>
                     <tr className="cb-sub-row">
                       <td colSpan={3}></td>
                       <td><strong>Tax ({(project.taxRate * 100).toFixed(2)}%)</strong></td>
-                      <td className="cb-right">{exactMoney2(calc.tax)}</td>
+                      <td className="cb-right">{exactMoney(calc.tax)}</td>
                       <td colSpan={2}></td>
                     </tr>
                     <tr className="cb-sub-row">
                       <td colSpan={3}></td>
                       <td><strong>Total</strong></td>
-                      <td className="cb-right"><strong>{exactMoney2(calc.preInstallTotal)}</strong></td>
+                      <td className="cb-right"><strong>{exactMoney(calc.preInstallTotal)}</strong></td>
                       <td colSpan={2}></td>
                     </tr>
                     <tr className="cb-install-row">
                       <td colSpan={2}><strong>Cabinet Installation</strong></td>
                       <td colSpan={2} className="cb-right"><strong>Total</strong></td>
-                      <td className="cb-right"><strong>{exactMoney2(project.installationTotal)}</strong></td>
+                      <td className="cb-right"><strong>{exactMoney(project.installationTotal)}</strong></td>
                       <td colSpan={2} style={{ color: "var(--muted)", fontSize: 12 }}>separate attachment</td>
                     </tr>
                     <tr className="cb-grand-row">
                       <td colSpan={4}><strong>Grand Total</strong></td>
-                      <td className="cb-right"><strong>{exactMoney2(calc.grandTotal)}</strong></td>
+                      <td className="cb-right"><strong>{exactMoney(calc.grandTotal)}</strong></td>
                       <td colSpan={2}></td>
                     </tr>
                   </tfoot>

@@ -9,7 +9,7 @@ export default function CabinetBidPage() {
   return (
     <main className="page">
       <div className="shell">
-        <div className="page-heading">
+        <div className="page-heading no-print">
           <div>
             <h1>Cabinet Bid Summary</h1>
             <p>Enter unit types and quantities to generate a full cabinet quote summary.</p>
