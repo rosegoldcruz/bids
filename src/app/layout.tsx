@@ -32,6 +32,7 @@ export default function RootLayout({
               </span>
             </Link>
             <nav className="nav" aria-label="Main navigation">
+              <Link href="/cabinet-bid">Cabinet Bid</Link>
               <Link href="/price-sheets">Price Sheets</Link>
               <Link href="/dashboard">Dashboard</Link>
               <Link href="/how-to-use">How To Use</Link>
